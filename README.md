@@ -1,4 +1,4 @@
-# Graphical Password Authentincation
+<!-- # Graphical Password Authentincation
 
 ## Setup Guide
 Copy & Paste the below commands step by step.
@@ -99,4 +99,4 @@ Account blocked due to multiple Failed attempts
 <br>
 
 #### Thank you
-
+ -->

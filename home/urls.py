@@ -4,7 +4,7 @@ from .views import (
     register_page, 
     login_page, 
     logout_page, 
-    login_from_uid, 
+    login_from_uid,
     reset_view, 
     reset_from_uid,
     )

@@ -7,11 +7,11 @@ Home Page
 
 {% block content %}
 <h1>Welcome {{ request.user.username }}</h1>
-<h1>Auth status: {{request.user.is_authenticated}}</h1>
+{% comment %} <h1>Auth status: {{request.user.is_authenticated}}</h1> {% endcomment %}
 <br>
 <br>
 <p>
-    Depending on the Auth status, you will be seeing login/logout button at the top right.
+    Welcome to the Graphical Password Authentication System, a secure and user-friendly way to protect your account.
     <br>
     <br>
     Login: &nbsp&nbsp&nbspTo continue login

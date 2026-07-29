@@ -13,29 +13,45 @@
     {% load static %}
 
     <style type="text/css">
-        @import url(https://fonts.googleapis.com/css?family=McLaren&display=swap);
+        @import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
 
         body {
-            font-family: 'McLaren';
+            font-family: 'Playfair Display';
             font-style: normal;
             font-weight: 200;
             margin: 0px;
             background: #DCDCDC;
         }
+
+        .navbar {
+            background-color: #20205b;
+            font-family: 'McLaren', serif;
+        }
+
+        .navbar .navbar-brand,
+        .navbar .nav-link {
+            color: #fff;
+        }
+
+        .navbar .navbar-brand:hover,
+        .navbar .nav-link:hover {
+            color: #ffdd57; /* Change hover color if desired */
+        }
     </style>
 
     <title>
         {% block title %}
-
+            
         {% endblock %}
     </title>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand sticky-top">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static "images/crypto.jpg" %}" width="30" height="30" class="d-inline-block align-top"
+            <img src="{% static "images/shield.png " %}" width="35" height="40" class="d-inline-block align-top"
                 alt="zzzz">
             Graphical Password Authentication
         </a>

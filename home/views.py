@@ -4,12 +4,14 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from graphical_pwd_auth.settings import N, TBA, EMAIL_HOST_USER, ALLOWED_HOSTS
+#from .phishing_detector import check_phishing
+#from .models import PhishingLog 
 from .models import LoginInfo
 import random, uuid
 
 
 def get_pwd_imgs():
-    # These images are just to confuse the attacker
+    # These images are just to confuse the hacker
     images = random.sample(range(1, 39), N * N)
     print(images)
     p_images = []
@@ -52,7 +54,7 @@ def sendLoginLinkMailToUser(username):
             subject='Link to Log in to your account',
             body='''
             Someone tried to bruteforce on your account.
-            Click the Link to Login to your account directly.
+            Click the link to login to your account directlly.
             The link is one-time clickable
             link: http://{}:8000/login/{}
             '''.format(ALLOWED_HOSTS[-1], link), # might wanna change the allowd_host
@@ -89,31 +91,33 @@ def sendPasswordResetLinkToUser(username):
     return True
 
 
+#Rendering of pages
 def home_page(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html') #display home page
 
 
 def register_page(request):
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
-        password = request.POST['password']
-        print(username, password)
+        password = request.POST['password']  # The confirmed password pattern from JavaScript
+
         try:
-            # create user and loginInfo for him
+            # Create the user and save login information
             user = User.objects.create_user(email=email, username=username, password=password)
             login_info = LoginInfo(user=user, fails=0)
             login_info.save()
             messages.success(request, 'Account created successfully!')
         except Exception:
-            messages.warning(request, 'Error while creating Account!')
+            messages.warning(request, 'Error while creating account!')
         
         return redirect('home')
     else:
         data = {
-            'p_images': get_pwd_imgs(),
+            'p_images': get_pwd_imgs(),  # Images for graphical password grid
         }
         return render(request, 'register.html', context=data)
+
 
 
 def login_page(request):
@@ -181,7 +185,7 @@ def reset_view(request):
             messages.warning(request, 'User doesn\'t exist!')
         return redirect('home')
     else:
-        return render(request, 'reset_request.html')
+        return render(request, 'reset.html')
 
 
 def reset_from_uid(request, uid):
@@ -216,6 +220,27 @@ def reset_from_uid(request, uid):
             messages.warning(request, 'Invalid Link. Please check again!')
             return redirect('home')
 
+
+ #def register(request):
+    if request.method == "POST":
+        username = request.POST.get("username", "")
+        email = request.POST.get("email", "")
+        
+        # Check both fields for phishing
+        for field_value in [username, email]:
+            result = check_phishing(field_value)
+            if result["is_suspicious"]:
+                PhishingLog.objects.create(
+                    flagged_input=field_value,
+                    risk_level=result["risk_level"],
+                    reason=result["reason"],
+                    ip_address=request.META.get("REMOTE_ADDR")
+                )
+                return render(request, "register.html", {
+                    "error": "Suspicious input detected. Registration blocked."
+                })
+        
+        # Continue with your existing registration logic...
 
 def logout_page(request):
     logout(request)
