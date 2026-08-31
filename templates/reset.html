@@ -11,7 +11,7 @@ Password Reset Page
         <form class="" action="" method="post" id="post-form">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Reset Your Password</legend>
+                <legend class="border-bottom mb-4">Reset Your Password, {{username}}</legend>
             </fieldset>
 
             <br>
@@ -47,7 +47,7 @@ Password Reset Page
             document.getElementById(res).style.border = null;
         } else {
             gpwd_set.add(res);
-            document.getElementById(res).style.border = "2px solid red";
+            document.getElementById(res).style.border = "2px dotted red";
         }
 
         console.log(gpwd_set);

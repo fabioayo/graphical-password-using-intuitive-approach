@@ -4,8 +4,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from graphical_pwd_auth.settings import N, TBA, EMAIL_HOST_USER, ALLOWED_HOSTS
-#from .phishing_detector import check_phishing
-#from .models import PhishingLog 
+ 
 from .models import LoginInfo
 import random, uuid
 
@@ -13,11 +12,9 @@ import random, uuid
 def get_pwd_imgs():
     # These images are just to confuse the hacker
     images = random.sample(range(1, 39), N * N)
-    print(images)
     p_images = []
     for i in range(0, N * N, N):
         p_images.append(images[i:i+N])
-    print(p_images)
     return p_images
     
 
@@ -185,11 +182,14 @@ def reset_view(request):
             messages.warning(request, 'User doesn\'t exist!')
         return redirect('home')
     else:
-        return render(request, 'reset.html')
+        data = {
+                    'p_images': get_pwd_imgs(),
+                }
+        return render(request, 'reset.html', context=data)
 
 
 def reset_from_uid(request, uid):
-    print('hello')
+    # print('hello')
     if request.method == 'POST':
         print('hi-post')
         password = request.POST['password']
