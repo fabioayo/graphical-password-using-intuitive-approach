@@ -219,27 +219,7 @@ def reset_from_uid(request, uid):
         except Exception:
             messages.warning(request, 'Invalid Link. Please check again!')
             return redirect('home')
-
-
- #def register(request):
-    if request.method == "POST":
-        username = request.POST.get("username", "")
-        email = request.POST.get("email", "")
-        
-        # Check both fields for phishing
-        for field_value in [username, email]:
-            result = check_phishing(field_value)
-            if result["is_suspicious"]:
-                PhishingLog.objects.create(
-                    flagged_input=field_value,
-                    risk_level=result["risk_level"],
-                    reason=result["reason"],
-                    ip_address=request.META.get("REMOTE_ADDR")
-                )
-                return render(request, "register.html", {
-                    "error": "Suspicious input detected. Registration blocked."
-                })
-        
+      
         # Continue with your existing registration logic...
 
 def logout_page(request):
